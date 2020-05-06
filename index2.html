@@ -20,13 +20,15 @@
 	</head>
 	<body>
 		<nav class="navbar navbar-dark bg-dark">
-			<span class="navbar-brand mb-0 h1">Xpers</span>
+            <span class="navbar-brand mb-0 h1">SpendTrack</span>
+            <span class="navbar-brand mb-0 h1" id="totalExp"></span>
 		</nav>
 		<div class="container-fluid bg-light" style="min-height: 100vh">
 			<div class="container">
 				<div class="jumbotron mt-4">
 					<div class="input-group mb-3">
-						<input
+                        <input
+                            id="input"
 							type="text"
 							class="form-control"
 							placeholder="Amount spent"
@@ -41,7 +43,8 @@
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="spent at">@</span>
 						</div>
-						<input
+                        <input
+                            id="desc"
 							type="text"
 							class="form-control"
 							placeholder="spent On"
@@ -56,37 +59,75 @@
 
 				<div>
 					<ul class="list-group">
-						<li class="list-group-item d-flex justify-content-between">
-							<div class="d-flex flex-column">
-								Tshirt
-								<small class="text-muted">March 11, 2019</small>
-							</div>
-							<div>
-								<span class="px-5">
-									500
-								</span>
-								<button type="button" class="btn btn-outline-danger btn-sm">
-									<i class="fas fa-trash-alt"></i>
-								</button>
-							</div>
-						</li>
-						<li class="list-group-item d-flex justify-content-between">
-							<div class="d-flex flex-column">
-								Movie
-								<small class="text-muted">Feb 12, 2019</small>
-							</div>
-							<div>
-								<span class="px-5">
-									1500
-								</span>
-								<button type="button" class="btn btn-outline-danger btn-sm">
-									<i class="fas fa-trash-alt"></i>
-								</button>
-							</div>
-						</li>
+						<div id="table"></div>
 					</ul>
 				</div>
 			</div>
-		</div>
+        </div>
+        
+        <script>
+
+                // Getting all the elements
+                const buttonEl = document.querySelector("#button-addon2");
+                const toAddEl = document.querySelector("#input");
+                const descEl = document.querySelector("#desc")
+                const tableEl = document.querySelector("#table")
+                const totalExpEl = document.querySelector("#totalExp")
+    
+                let totalExp = 0;
+                let allExpenses = [];
+                
+                function increaseCounter() {
+    
+                    let expenseItem = {};
+                    expenseItem.desc = descEl.value;
+                    expenseItem.amount = parseInt(toAddEl.value, 10);
+                    expenseItem.moment = new Date();
+                    totalExp += expenseItem.amount;
+                    totalExpEl.textContent = `Total expense = ${totalExp}`;
+
+                    allExpenses.push(expenseItem);
+    
+                    // Adding new item to the list
+                    const allExpensesHTML = allExpenses.map(expense => createListItem(expense));
+                    const allExpensesHTMLjoined = allExpensesHTML.join(" ");
+                    tableEl.innerHTML = allExpensesHTMLjoined;
+                }
+    
+                buttonEl.addEventListener("click", increaseCounter, false);
+
+                // Controller functions
+                function getDateString(moment){ 
+                    return moment.toLocaleDateString("en-US", {
+                        year: "numeric", 
+                        month: "long", 
+                        day: "numeric"})
+                    }
+
+                // View Layer
+                function createListItem({desc, amount, moment}) {
+                    let str =  `
+                        <li class="list-group-item d-flex justify-content-between">
+							<div class="d-flex flex-column">
+								${desc}
+								<small class="text-muted">
+                                    ${getDateString(moment)}
+                                </small>
+							</div>
+							<div>
+								<span class="px-5">
+									${amount}
+								</span>
+								<button type="button" class="btn btn-outline-danger btn-sm">
+									<i class="fas fa-trash-alt"></i>
+								</button>
+							</div>
+						</li>
+                        `
+                    return str;
+                }
+                
+        
+        </script>
 	</body>
 </html>
