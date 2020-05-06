@@ -89,14 +89,41 @@
                     allExpenses.push(expenseItem);
     
                     // Adding new item to the list
-                    const allExpensesHTML = allExpenses.map(expense => createListItem(expense));
-                    const allExpensesHTMLjoined = allExpensesHTML.join(" ");
-                    tableEl.innerHTML = allExpensesHTMLjoined;
+                    renderList(allExpenses);
                 }
     
                 buttonEl.addEventListener("click", increaseCounter, false);
 
                 // Controller functions
+
+                // Delete item function
+                function deleteItem(key){
+                    console.log(`Delete item was called `, key)
+                    // let newExpenses = [];
+                    // for (let i=0; i<allExpenses.length; i++){
+                    //     if (allExpenses[i].moment.valueOf() !== key){
+                    //         newExpenses.push(allExpenses[i]);
+                    //     }
+                    // }
+
+                    // let newExpenses = allExpenses.filter(expense => {
+                    //     if (expense.moment.valueOf() !== key) {return expense}
+                    // })
+
+                    let newExpenses = allExpenses.filter(expense => expense.moment.valueOf() !== key);
+
+                    allExpenses = newExpenses;
+                    renderList(allExpenses);
+                }
+
+                // Render list
+                function renderList(array){
+                    const allExpensesHTML = array.map(expense => createListItem(expense));
+                    const allExpensesHTMLjoined = allExpensesHTML.join(" ");
+                    tableEl.innerHTML = allExpensesHTMLjoined;
+                }
+
+                // Get date string from date object
                 function getDateString(moment){ 
                     return moment.toLocaleDateString("en-US", {
                         year: "numeric", 
@@ -118,8 +145,10 @@
 								<span class="px-5">
 									${amount}
 								</span>
-								<button type="button" class="btn btn-outline-danger btn-sm">
-									<i class="fas fa-trash-alt"></i>
+								<button 
+                                    type="button" 
+                                    onclick = "deleteItem(${moment.valueOf()})"
+                                    class="btn btn-outline-danger btn-sm"> <i class="fas fa-trash-alt"></i>
 								</button>
 							</div>
 						</li>
