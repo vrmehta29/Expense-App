@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        body{
+            color: #d8dde0;
+            background-color: #03a9f4;
+            height: 100vh;
+            font-family: monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center;
+        }
+    </style>
+
+
+</head>
+<body>
+
+    <div class="header">
+        <h1> Expense Calculator </h1>
+    </div>
+
+    <div>
+        <input id="input" type="number"></input>
+        <select id="desc" name="description">
+                <option value="food">Food</option>
+                <option value="clothes">Clothes</option>
+                <option value="travel">Travel</option>
+        </select>
+        <button id="plusButton">+</button>
+    </div>
+
+    <h3 id="para">Total Expense =  </h3>
+    <div id="table"></div>
+
+    <script>
+
+            // Getting all the elements
+            const buttonEl = document.querySelector("#plusButton");
+            const toAddEl = document.querySelector("#input");
+            const descEl = document.querySelector("#desc")
+            const paraEl = document.querySelector("#para");
+            const tableEl = document.querySelector("#table")
+
+            let desc;
+            let totalExp = 0;
+            let increment;
+            let allExpenses = [];
+            
+            function increaseCounter() {
+
+                let expenseItem = {};
+                desc = descEl.value
+                toAdd = parseInt(toAddEl.value, 10)
+                expenseItem.desc = desc;
+                expenseItem.amount = toAdd;
+                
+                allExpenses.push(expenseItem);
+
+                const allExpensesHTML = allExpenses.map(expenseItem => { 
+                    return `<div> ${expenseItem.desc} :: ${expenseItem.amount} </div>`
+                });
+                const allExpensesHTMLjoined = allExpensesHTML.join(" ");
+                tableEl.innerHTML = allExpensesHTMLjoined;
+
+                totalExp += toAdd;
+                paraEl.textContent = `Total expense = ${totalExp}`;
+            }
+
+            buttonEl.addEventListener("click", increaseCounter, false);
+            
+    
+    </script>
+</body>
+</html>
